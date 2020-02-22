@@ -27,7 +27,7 @@ void main() {
       (x) => MediaQuery.of(context).size.width),
     ),
 */
-// 
+//
 // Future<double> whenNotZero(Stream<double> source) async {
 //   await for (double value in source) {
 //     print("Width:" + value.toString());
@@ -151,37 +151,41 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  PreferredSizeWidget _buildAppBar() { // does not need context ?!
+    return Platform.isIOS
+      ? CupertinoNavigationBar(
+          middle: Text(
+            'Personal Expenses',
+            style: Theme.of(context).textTheme.title,
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            // otherwise Row takes all the width and we don't have the 'middle' text
+            children: <Widget>[
+              GestureDetector(
+                  onTap: () => _startAddNewTransaction(context),
+                  child: const Icon(CupertinoIcons.add))
+            ],
+          ),
+        )
+      : AppBar(
+          title: const Text(
+            'Personal Expenses',
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () => _startAddNewTransaction(context),
+            ),
+          ],
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final bool _isLandscape = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: Text(
-              'Personal Expenses',
-              style: Theme.of(context).textTheme.title,
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              // otherwise Row takes all the width and we don't have the 'middle' text
-              children: <Widget>[
-                GestureDetector(
-                    onTap: () => _startAddNewTransaction(context),
-                    child: const Icon(CupertinoIcons.add))
-              ],
-            ),
-          )
-        : AppBar(
-            title: const Text(
-              'Personal Expenses',
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              ),
-            ],
-          );
+    final appBar = _buildAppBar();
     final contentSize = mediaQuery.size.height -
         appBar.preferredSize.height -
         mediaQuery.padding.top;
