@@ -42,6 +42,7 @@ class TransactionList extends StatelessWidget {
               childCount: transactions.length,
               findChildIndexCallback: (Key key) {
                 // used to match key in element with transaction in TrasactionList
+                // to use proper state
                 return transactions
                     .indexOf((key as ValueKey).value as Transaction);
               },
