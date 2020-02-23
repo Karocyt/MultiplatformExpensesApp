@@ -79,9 +79,26 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [];
   bool _showChart = true;
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+  }
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -151,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
-  PreferredSizeWidget _buildAppBar() { // does not need context ?!
+  PreferredSizeWidget _buildAppBar() { // does not need context ?! providet via getter ! 
     return Platform.isIOS
       ? CupertinoNavigationBar(
           middle: Text(
