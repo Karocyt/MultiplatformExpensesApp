@@ -36,6 +36,7 @@ class TransactionList extends StatelessWidget {
               (ctx, index) {
                 return TransactionCard(
                     key: ValueKey(transactions[index]),
+                    // ValueKey computed on data to avoid complex index fetching
                     transaction: transactions[index],
                     deleteTx: deleteTx);
               },
