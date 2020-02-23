@@ -30,11 +30,22 @@ class TransactionList extends StatelessWidget {
               ],
             ),
           )
-        : ListView.builder(
-            itemBuilder: (ctx, index) {
-              return TransactionCard(key: ValueKey(transactions[index].id), transaction: transactions[index], deleteTx: deleteTx);
-            },
-            itemCount: transactions.length,
+        : ListView.custom(
+            // builder is not aware of TransactionList hence can't really use keys
+            childrenDelegate: SliverChildBuilderDelegate(
+              (ctx, index) {
+                return TransactionCard(
+                    key: ValueKey(transactions[index]),
+                    transaction: transactions[index],
+                    deleteTx: deleteTx);
+              },
+              childCount: transactions.length,
+              findChildIndexCallback: (Key key) {
+                // used to match key in element with transaction in TrasactionList
+                return transactions
+                    .indexOf((key as ValueKey).value as Transaction);
+              },
+            ),
           );
   }
 }
